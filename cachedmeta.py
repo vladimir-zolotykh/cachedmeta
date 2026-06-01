@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+from collections import defaultdict
 
 
 class CachedMeta(type):
@@ -19,7 +20,7 @@ class CachedMeta(type):
         else:
             tup = tuple(args)
             obj = super().__call__(*args, **kwds)
-            type(cls)._instances = dict(key=tup, value=obj)
+            type(cls)._instances[cls] = dict(key=tup, value=obj)
             return obj
 
 
@@ -29,6 +30,7 @@ class CachedData(metaclass=CachedMeta):
 
 class Person(CachedData):
     def __init__(self, name, age, salary):
+        print(f"Initializing {name!r}")
         self.name = name
         self.age = age
         self.salary = salary
@@ -37,5 +39,6 @@ class Person(CachedData):
 if __name__ == "__main__":
     # jim = Person("James Patterson", 42, 78000)
     # dan = Person("Daniel Okonkwo", 29, 112000)
-    ed = Person("Eduardo Flores", 61, 54000)
-    print(ed.__dict__)
+    ed1 = Person("Eduardo Flores", 61, 54000)
+    ed2 = Person("Eduardo Flores", 61, 54000)
+    # print(ed.__dict__)
