@@ -20,7 +20,9 @@ class CachedMeta(type):
         else:
             tup = tuple(args)
             obj = super().__call__(*args, **kwds)
-            type(cls)._instances[cls] = dict(key=tup, value=obj)
+            d = {}
+            d[tup] = obj
+            type(cls)._instances[cls] = d
             return obj
 
 
