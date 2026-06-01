@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # PYTHON_ARGCOMPLETE_OK
+"""
+>>> exer = Exercise("bench press", 50.0, 4)
+>>> as_csv(exer)
+"name='bench press', weight=50.0, reps=4"
+>>> Exercise("bench press", 50.0)  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+TypeError: Exercise expects 3 arguments
+"""
 from typing import Any
 from operator import itemgetter
 
@@ -29,5 +38,6 @@ def as_csv(t: MyTuple) -> tuple[Any, ...]:
 
 
 if __name__ == "__main__":
-    exer = Exercise("bench press", 50.0, 4)
-    print(as_csv(exer))
+    import doctest
+
+    doctest.testmod()
