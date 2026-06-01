@@ -4,18 +4,23 @@
 
 
 class Singleton(type):
-    _instance = None
+    _instances = {}
 
     def __call__(cls):
-        if Singleton._instance:
-            return Singleton._instance
+        if cls in Singleton._instances:
+            return Singleton._instances[cls]
         else:
-            cls = super().__call__()
-            Singleton._instance = cls
-            return cls
+            obj = super().__call__()
+            Singleton._instances[cls] = obj
+            return obj
 
 
 class Logger(metaclass=Singleton):
+    def __init__(self):
+        print(f"Initializing {self.__class__.__name__}")
+
+
+class Module(metaclass=Singleton):
     def __init__(self):
         print(f"Initializing {self.__class__.__name__}")
 
@@ -24,3 +29,6 @@ if __name__ == "__main__":
     g1 = Logger()
     g2 = Logger()
     assert g1 is g2
+    m1 = Module()
+    m2 = Module()
+    assert m1 is m2
