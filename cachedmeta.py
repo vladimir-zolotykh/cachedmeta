@@ -5,24 +5,15 @@ from collections import defaultdict
 
 
 class CachedMeta(type):
-    _instances = {}
+    _instances = defaultdict(defaultdict)
 
     def __call__(cls, *args, **kwds):
-        if cls in type(cls)._instances:
-            objects = type(cls)._instances[cls]
-            tup = tuple(args)
-            if tup in objects:
-                return objects[tup]
-            else:
-                obj = super().__call__(*args, **kwds)
-                objects[tup] = obj
-                return obj
+        tup = tuple(args)
+        if cls in type(cls)._instances and tup in type(cls)._instances[cls]:
+            return type(cls)._instances[cls][tup]
         else:
-            tup = tuple(args)
             obj = super().__call__(*args, **kwds)
-            d = {}
-            d[tup] = obj
-            type(cls)._instances[cls] = d
+            type(cls)._instances[cls][tup] = obj
             return obj
 
 
@@ -39,8 +30,6 @@ class Person(CachedData):
 
 
 if __name__ == "__main__":
-    # jim = Person("James Patterson", 42, 78000)
-    # dan = Person("Daniel Okonkwo", 29, 112000)
+    jim = Person("James Patterson", 42, 78000)
+    dan = Person("Daniel Okonkwo", 29, 112000)
     ed1 = Person("Eduardo Flores", 61, 54000)
-    ed2 = Person("Eduardo Flores", 61, 54000)
-    # print(ed.__dict__)
